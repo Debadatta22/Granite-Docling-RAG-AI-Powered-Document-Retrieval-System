@@ -1,6 +1,35 @@
 # 🚀 Granite-Docling-RAG-AI-Powered-Document-Retrieval-System  
 
-A production-ready README you can drop into your repo. It explains the problem, the solution, the workflow, and exactly how to run and extend the lab you just completed.
+<p align="center">
+  <a href="https://www.python.org/downloads/">
+    <img src="https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  </a>
+  <a href="https://github.com/Debadatta22/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/Debadatta22/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System?style=for-the-badge" alt="License"/>
+  </a>
+  <a href="https://github.com/Debadatta22/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System/stargazers">
+    <img src="https://img.shields.io/github/stars/Debadatta22/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System?style=for-the-badge&logo=github" alt="Stars"/>
+  </a>
+  <a href="https://github.com/Debadatta22/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System/network/members">
+    <img src="https://img.shields.io/github/forks/Debadatta22/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System?style=for-the-badge&logo=github" alt="Forks"/>
+  </a>
+  <a href="https://github.com/Debadatta22">
+    <img src="https://img.shields.io/badge/Author-Debadatta22-2D9BF0?style=for-the-badge&logo=github&logoColor=white" alt="Author"/>
+  </a>
+</p>
+
+---
+
+## 📜 License  
+
+<p align="center">
+  <a href="https://github.com/Debadatta22/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="MIT License"/>
+  </a>
+</p>
+
+This project is licensed under the **MIT License** – see the [LICENSE](https://github.com/Debadatta22/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System/blob/main/LICENSE) file for details.
+ 
 
 ---
 
