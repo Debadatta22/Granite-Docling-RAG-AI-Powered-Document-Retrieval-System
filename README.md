@@ -1,118 +1,138 @@
-# Granite-Docling-RAG-AI-Powered-Document-Retrieval-System
+# 🚀 Granite-Docling-RAG-AI-Powered-Document-Retrieval-System  
+
 A production-ready README you can drop into your repo. It explains the problem, the solution, the workflow, and exactly how to run and extend the lab you just completed.
 
---------------
+---
 
--------------
+## 🔗 Quick Access  
 
-1) Problem Statement
+<p align="center">
+  <a href="https://colab.research.google.com/drive/1Ul0W_HS8lO5jvTqrpy3maTMpm8Xd3myv?usp=sharing" target="_blank">
+    <img src="https://img.shields.io/badge/Open%20in%20Google%20Colab-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white" alt="Open In Colab"/>
+  </a>
+</p>
 
-Teams drown in PDFs, web pages, and manuals. Keyword search misses context; LLMs hallucinate when they don’t “know” your documents. You need a system that understands your content, finds the right passages fast, and answers with citations—reliably and at scale.
+---
 
-Goal: Build a Retrieval-Augmented Generation (RAG) pipeline that ingests heterogeneous documents (PDF/HTML), converts them to high-quality text, indexes them as embeddings in a vector store, and uses an LLM to answer questions grounded in the retrieved chunks.
+## 📑 Table of Contents  
 
-2) Solution Overview
+1. [Problem Statement](#1-problem-statement)  
+2. [Solution Overview](#2-solution-overview)  
+3. [Architecture & Workflow](#3-architecture--workflow)  
+4. [Tech Stack](#4-tech-stack)  
+5. [Features](#5-features)  
+6. [Getting Started](#6-getting-started)  
+7. [Configuration](#7-configuration)  
+8. [How to Run](#8-how-to-run)  
+9. [Algorithms & Concepts](#9-algorithms--concepts)  
+10. [Example: Swapping Sources & Questions](#10-example-swapping-sources--questions)  
+11. [Extensibility](#11-extensibility)  
+12. [Evaluation & Quality](#12-evaluation--quality)  
+13. [Real-World Considerations](#13-real-world-considerations)  
+14. [Project Structure](#14-project-structure-suggested)  
+15. [License](#15-license)  
+16. [Certification](#16-certification)  
+17. [Acknowledgments](#17-acknowledgments)  
+18. [Conclusion](#18-conclusion)  
 
-This project implements an end-to-end RAG stack using:
+---
 
-Docling for robust document conversion and chunking.
+## 1) Problem Statement  
+Teams drown in PDFs, web pages, and manuals. Keyword search misses context; LLMs hallucinate when they don’t “know” your documents. You need a system that understands your content, finds the right passages fast, and answers with citations—reliably and at scale.  
 
-IBM Granite:
+**Goal:** Build a Retrieval-Augmented Generation (RAG) pipeline that ingests heterogeneous documents (PDF/HTML), converts them to high-quality text, indexes them as embeddings in a vector store, and uses an LLM to answer questions grounded in the retrieved chunks.  
 
-Granite Embeddings to vectorize text for similarity search.
+---
 
-Granite Instruct as the LLM for grounded answers.
+## 2) Solution Overview  
+This project implements an end-to-end RAG stack using:  
+- **Docling** for robust document conversion and chunking.  
+- **IBM Granite**:  
+  - Granite Embeddings to vectorize text for similarity search.  
+  - Granite Instruct as the LLM for grounded answers.  
+- **LangChain** to orchestrate embedding, storage, retrieval, and prompting.  
+- **Milvus (Lite)** as the local vector database for fast semantic search.  
 
-LangChain to orchestrate embedding, storage, retrieval, and prompting.
+The reference implementation wires these components together and demonstrates grounding on a small corpus (an HTML article + a PDF), then answering questions with citations.  
 
-Milvus (Lite) as the local vector database for fast semantic search.
-The reference implementation wires these components together and demonstrates grounding on a small corpus (an HTML article + a PDF), then answering questions with citations.
+---
 
-3) Architecture & Workflow
+## 3) Architecture & Workflow  
 
-            ┌──────────────────────────┐
-            │  Source Documents (PDF,  │
-            │  HTML, etc.)             │
-            └───────────┬──────────────┘
-                        │ parse + segment
-                        ▼
-               ┌──────────────────┐
-               │  Docling         │
-               │  (convert+chunk) │
-               └─────────┬────────┘
-                         │ embeddings
-                         ▼
-           ┌──────────────────────────┐
-           │ Granite Embeddings       │
-           │ (HuggingFace interface)  │
-           └───────────┬──────────────┘
-                       │ upsert
-                       ▼
-           ┌──────────────────────────┐
-           │ Milvus (Lite) Vector DB  │
-           └───────────┬──────────────┘
-                       │ retrieve top-k
-                       ▼
-           ┌──────────────────────────┐
-           │ LangChain RAG Chain      │
-           │ (stuff retrieved chunks) │
-           └───────────┬──────────────┘
-                       │ prompt
-                       ▼
-           ┌──────────────────────────┐
-           │ IBM Granite Instruct LLM │
-           └───────────┬──────────────┘
-                       │ grounded answer
-                       ▼
-                Final Answer + Context
+        ┌──────────────────────────┐
+        │  Source Documents (PDF,  │
+        │  HTML, etc.)             │
+        └───────────┬──────────────┘
+                    │ parse + segment
+                    ▼
+           ┌──────────────────┐
+           │  Docling         │
+           │  (convert+chunk) │
+           └─────────┬────────┘
+                     │ embeddings
+                     ▼
+       ┌──────────────────────────┐
+       │ Granite Embeddings       │
+       │ (HuggingFace interface)  │
+       └───────────┬──────────────┘
+                   │ upsert
+                   ▼
+       ┌──────────────────────────┐
+       │ Milvus (Lite) Vector DB  │
+       └───────────┬──────────────┘
+                   │ retrieve top-k
+                   ▼
+       ┌──────────────────────────┐
+       │ LangChain RAG Chain      │
+       │ (stuff retrieved chunks) │
+       └───────────┬──────────────┘
+                   │ prompt
+                   ▼
+       ┌──────────────────────────┐
+       │ IBM Granite Instruct LLM │
+       └───────────┬──────────────┘
+                   │ grounded answer
+                   ▼
+            Final Answer + Context
 
 
-Key ideas
 
-Convert & Chunk: Docling normalizes messy inputs to semantically clean text and chunks them for retrieval efficiency. 
+**Key Ideas:**  
+- **Convert & Chunk:** Docling normalizes messy inputs to semantically clean text and chunks them for retrieval efficiency.  
+- **Embed:** Text chunks embedded with `ibm-granite/granite-embedding-30m-english`.  
+- **Store & Retrieve:** Stored in Milvus Lite for fast similarity search.  
+- **Generate:** Granite 3.3 8B Instruct answers using retrieved context.  
 
-Embed: Text chunks are embedded using ibm-granite/granite-embedding-30m-english for compact, high-quality vectors. 
+---
 
-Store & Retrieve: Vectors are stored in Milvus (file-backed “Lite” mode) for fast similarity search—no external server needed. 
+## 4) Tech Stack  
+- **Language/Runtime:** Python 3.10+  
+- **Core Libraries:** `docling`, `langchain`, `langchain_community`, `langchain_huggingface`, `langchain_milvus`, `transformers`, `replicate`  
+- **Models:**  
+  - Embeddings → `ibm-granite/granite-embedding-30m-english`  
+  - LLM → `ibm-granite/granite-3.3-8b-instruct` (via Replicate)  
+- **Vector DB:** Milvus Lite  
 
-Generate: A Granite 3.3 8B Instruct model answers using retrieved context via LangChain’s “stuff documents” pattern. 
+---
 
-4) Tech Stack
+## 5) Features  
+✔ Ingests **web pages & PDFs** (extendable).  
+✔ **Hybrid chunking** with metadata for precise retrieval.  
+✔ **Local, serverless vector store** with Milvus Lite.  
+✔ Configurable **LLM/embedding models** and retrieval parameters.  
 
-Language/Runtime: Python 3.10+
+---
 
-Core libs: docling, langchain, langchain_community, langchain_huggingface, langchain_milvus, transformers, replicate
+## 6) Getting Started  
 
-Models:
+### 🔧 Prerequisites  
+- Python 3.10+  
+- A Replicate account + API token  
+- Basic knowledge of virtual environments  
 
-Embeddings: ibm-granite/granite-embedding-30m-english
+### 📦 Installation  
 
-LLM: ibm-granite/granite-3.3-8b-instruct (via Replicate) 
-
-Vector DB: Milvus (Lite via langchain_milvus) with local file URI. 
-
-5) Features
-
-Ingests web pages and PDFs (extendable to other formats supported by Docling). 
-
-Hybrid chunking with metadata for precise retrieval. 
-
-Local, serverless vector store (Milvus Lite) for easy dev. 
-
-Configurable LLM/embedding models and retrieval parameters.
-
-6) Getting Started
-Prerequisites
-
-Python 3.10+
-
-A Replicate account + API token (for Granite via Replicate).
-
-Basic understanding of virtual environments.
-
-Installation
-
-```
+```bash
 # 1) Create & activate a virtual environment
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
@@ -120,128 +140,120 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 # 2) Install dependencies
 pip install transformers langchain_community 'langchain_huggingface[full]' \
             langchain_milvus docling replicate
-# (Optional) utils from IBM Granite community if you use their helpers
-# pip install "git+https://github.com/ibm-granite-community/utils.git"
+
 ```
 
-Environment
+### (Optional):
 
-Set your Replicate token so the LLM can run:
+```
+pip install "git+https://github.com/ibm-granite-community/utils.git"
+```
+
+### 🌍 Environment Setup
 ```
 export REPLICATE_API_TOKEN=YOUR_TOKEN_HERE
-# Windows (PowerShell): $env:REPLICATE_API_TOKEN="YOUR_TOKEN_HERE"
+# Windows (PowerShell)
+$env:REPLICATE_API_TOKEN="YOUR_TOKEN_HERE"
 ```
 
-7) Configuration
+## 7) Configuration
 
-The reference script uses:
+- Embeddings: ibm-granite/granite-embedding-30m-english
 
-Embeddings: ibm-granite/granite-embedding-30m-english
+- LLM: ibm-granite/granite-3.3-8b-instruct
 
-LLM: ibm-granite/granite-3.3-8b-instruct
-You can change these in the code where HuggingFaceEmbeddings and Replicate are initialized. 
+- Vector DB: Milvus Lite (local file by default).
 
-Vector DB: A Milvus Lite database file is created automatically via connection_args={"uri": <tempfile>}. Replace with a persistent path in production. 
+- Sources: Replace sample docs with your own PDFs/HTML.
 
-Sources: The sample uses two public sources (an event article and a rules PDF) to demonstrate grounding. Replace sources = [...] with your own URLs/paths. 
+## 8) How to Run
 
-8) How to Run
 ```
 python granite_docling_rag.py
-
 ```
 
-What happens:
+### Workflow:
 
-Docling converts your sources and HybridChunker segments text into retrieval-friendly chunks with metadata. 
+1. Docling converts sources → chunks.
+2. Granite embeds chunks → stored in Milvus.
+3. Retriever pulls top-k chunks.
+4. Granite LLM generates grounded answers with context.
 
-Chunks are embedded using Granite Embeddings and upserted into Milvus. 
 
-A LangChain retriever pulls top-k chunks for the query. 
+## 9) Algorithms & Concepts
 
-A Granite Instruct model receives a prompt built with the retrieved context and returns a grounded answer. 
+Docling Conversion & Chunking – token-aware hybrid chunking.
 
-9) Algorithms & Concepts
+Text Embeddings – compact, high-quality vectors.
 
-Document Conversion & Chunking:
-Docling normalizes layout, extracts text, and HybridChunker uses a token-aware heuristic to produce chunks that balance coherence and retrieval quality. Metadata preserves source and chunk doc_id for traceability. 
+Vector Search (Milvus) – cosine similarity for retrieval.
 
-Text Embeddings:
-granite-embedding-30m-english maps chunks to dense vectors. Similarity (typically cosine/inner-product) powers semantic search. 
+RAG Prompting (Stuff Pattern) – chunks stuffed into prompt context.
 
-Vector Search (Milvus):
-Chunks are stored with an AUTOINDEX; top-k nearest neighbors are retrieved for a query vector to build context windows. 
+## 10) Example: Swapping Sources & Questions
 
-RAG Prompting (“Stuff” pattern):
-Retrieved texts are concatenated into a TokenizerChatPromptTemplate and sent to Granite Instruct. LangChain’s create_retrieval_chain orchestrates retrieval + generation. 
+Update sources = [...] with internal docs.
 
-10) Example: Swapping Sources & Questions
+Change query = "..." with your domain questions.
 
-Update sources = [...] with internal docs (policies, manuals, knowledge bases).
+## 11) Extensibility
 
-Change query = "..." to reflect your domain (“What is our return policy for enterprise customers?”).
-The same pipeline will return grounded answers with the right chunks attached. 
+Use different LLMs or embeddings.
 
-11) Extensibility
+Try semantic chunking.
 
-Different Models: Plug in other Granite sizes or providers (Hugging Face TGI, watsonx, etc.) by swapping the LLM and embeddings initializers. 
+Replace Milvus with FAISS/Chroma/Zilliz Cloud.
 
-Chunking Strategies: Try semantic chunking or overlap tuning for better recall/precision. 
+Add citations with clickable provenance.
 
-Vector Stores: Replace Milvus with FAISS, Chroma, pgvector, or Zilliz Cloud via LangChain adapters. 
+## 12) Evaluation & Quality
 
-Citations: Echo document.metadata['source'] in final answers for clickable provenance.
+✅ Groundedness checks
 
-12) Evaluation & Quality
+⚡ Latency optimization
 
-Groundedness: Manually verify that the answer’s statements appear in retrieved chunks.
+🔒 Safety filters
 
-Latency: Cache embeddings; persist the Milvus DB; pre-warm the LLM.
+## 13) Real-World Considerations
 
-Safety: Add content filters/governance before user-facing deployment.
+📜 Compliance & IP – respect TOS/robots.txt
 
-13) Real-World Considerations
+🔄 Updates – re-embed only changed files
 
-Compliance & IP: Make sure you have the right to crawl/index sources; honor website robots/TOS.
+🔑 Security – protect API tokens
 
-Updates: Re-embed only changed files; keep a background indexer.
-
-Security: Protect API keys via environment and secret managers.
-
-14) Project Structure (suggested)
+## 14) Project Structure (Suggested)
 ```
 .
-├── granite_docling_rag.py          # Reference script (RAG pipeline)
-├── data/                           # Local PDFs/HTML (optional)
-├── requirements.txt                # Pinned deps for reproducibility
+├── granite_docling_rag.py          # RAG pipeline
+├── data/                           # PDFs/HTML
+├── requirements.txt                # Dependencies
 ├── README.md                       # This file
-└── LICENSE                         # Your chosen license
+└── LICENSE                         # License
+
 ```
 
-16) License
+## 15) License
 
-MIT License
+MIT License  
 
-Copyright (c) 2025 Debadatta Rout
+Copyright (c) 2025 Debadatta Rout  
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-...
+Permission is hereby granted, free of charge, to any person obtaining a copy...
 
-## Certification
+## 16) Certification
 
-<img width="1332" height="840" alt="Screenshot 2025-08-25 213229" src="https://github.com/user-attachments/assets/8cab1974-399c-4f16-b5f7-44d55bb9da53" />
+<img width="1332" height="840" alt="Certification" src="https://github.com/user-attachments/assets/8cab1974-399c-4f16-b5f7-44d55bb9da53" /> <p align="center"> <a href="https://skills.yourlearning.ibm.com/certificate/share/d47842dfb2ewogICJvYmplY3RUeXBlIiA6ICJBQ1RJVklUWSIsCiAgImxlYXJuZXJDTlVNIiA6ICI1MTExOTM4UkVHIiwKICAib2JqZWN0SWQiIDogIkFMTS1DT1VSU0VfMzk0NjQ3MyIKfQd3c4bd8af9-10" target="_blank"> <img src="https://img.shields.io/badge/View%20Certificate-2D9BF0?style=for-the-badge&logo=ibm&logoColor=white" alt="IBM Certificate"/> </a> </p>
 
+## 17) Acknowledgments
 
-17) Acknowledgments
+IBM Granite community for RAG recipes.
 
-IBM Granite community examples and recipes for RAG pipelines and LangChain components. 
+Docling project for parsing + chunking.
 
-Docling project for high-fidelity document conversion and chunking. 
+Milvus community for vector search.
 
-Milvus community for scalable vector search and a convenient Lite mode. 
+## 18) Conclusion
 
-18) Conclusion
-
-This project shows how to ground LLM answers in your own documents using a clean, modular RAG stack. With Docling for robust parsing, Granite for strong embeddings and instruction-following, Milvus for lightning-fast search, and LangChain for orchestration, you get accurate, explainable answers that scale from notebooks to production services. Swap in your documents, tune chunking and retrieval, and you’re ready to deploy.
-
+This project demonstrates how to ground LLM answers in your own documents using a modular RAG stack. With Docling + Granite + Milvus + LangChain, you get accurate, explainable, and scalable document-aware AI answers.
 
