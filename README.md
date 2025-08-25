@@ -1,5 +1,18 @@
 # 🚀 Granite-Docling-RAG-AI-Powered-Document-Retrieval-System  
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
+  <img src="https://img.shields.io/github/license/debadattarout/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System?style=for-the-badge" alt="License"/>
+  <img src="https://img.shields.io/github/stars/debadattarout/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System?style=for-the-badge&logo=github" alt="Stars"/>
+  <img src="https://img.shields.io/github/forks/debadattarout/Granite-Docling-RAG-AI-Powered-Document-Retrieval-System?style=for-the-badge&logo=github" alt="Forks"/>
+</p>
+
+A production-ready README you can drop into your repo. It explains the problem, the solution, the workflow, and exactly how to run and extend the lab you just completed.
+
+---
+
+# 🚀 Granite-Docling-RAG-AI-Powered-Document-Retrieval-System  
+
 A production-ready README you can drop into your repo. It explains the problem, the solution, the workflow, and exactly how to run and extend the lab you just completed.
 
 ---
