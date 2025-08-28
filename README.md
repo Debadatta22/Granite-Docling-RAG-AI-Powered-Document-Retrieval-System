@@ -69,7 +69,9 @@ This project is licensed under the **MIT License** – see the [LICENSE](https:/
 ## 1) Problem Statement  
 Teams drown in PDFs, web pages, and manuals. Keyword search misses context; LLMs hallucinate when they don’t “know” your documents. You need a system that understands your content, finds the right passages fast, and answers with citations—reliably and at scale.  
 
-**Goal:** Build a Retrieval-Augmented Generation (RAG) pipeline that ingests heterogeneous documents (PDF/HTML), converts them to high-quality text, indexes them as embeddings in a vector store, and uses an LLM to answer questions grounded in the retrieved chunks.  
+**Goal:** 
+
+Build a Retrieval-Augmented Generation (RAG) pipeline that ingests heterogeneous documents (PDF/HTML), converts them to high-quality text, indexes them as embeddings in a vector store, and uses an LLM to answer questions grounded in the retrieved chunks.  
 
 ---
 
